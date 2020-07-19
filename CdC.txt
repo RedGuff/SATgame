@@ -1,0 +1,7 @@
+https://www.youtube.com/watch?v=AgtOCNCejQ8 18:40
+0.0 Fabrication 00 et affiche le jeu.
+0.1 Fabrication au hasard
+0.5 Tests et interface ok.
+1.0 Fonctionne.
+1.5 Fichiers
+2.0 Langues, choix du jeu facile ou difficile.
