@@ -3,17 +3,20 @@
 #include <fstream>
 #include <vector>
 #include <string>
+#include <bits/stdc++.h>
 #include <algorithm> // https://bakura.developpez.com/tutoriel/cpp/tri/
 using namespace std;
 // https://www.youtube.com/watch?v=AgtOCNCejQ8
 
-int maxCandidate() { return 12;}
+int maxCandidate() { return 14;} // Max 14 for windows 10, to avoid bad presentation.
+int minCandidate() { return 2;}
+
 int membersCalc() {
-    return rand() % 5 + 3;
+    return rand() % 50 + 10;
     }
 
 int choicesCalc() {
-    return rand() % 5 + 3;
+    return rand() % (maxCandidate() - minCandidate() + 1) + minCandidate();
     }
 
 void absVector1D(vector < int >& Matrix1D) {
@@ -24,8 +27,13 @@ void absVector1D(vector < int >& Matrix1D) {
 
 void displayMatrix(vector < vector < int > >& Matrix) { // Ok.
     for(int a = 0; a < Matrix.size(); a++) {
+        int column = 0;
         for(int b = 0; b < Matrix[a].size(); b++) {
-            cout << Matrix[a][b] << "\t" ;
+            while(abs(Matrix[a][b]) != column) {
+                column++;
+                cout << "\t" ;
+                }
+            cout << Matrix[a][b];
             }
         cout << endl;
         }
@@ -110,13 +118,33 @@ bool testMatrix(vector < int >&MatrixProposed, vector < vector < int > >& Matrix
     return true;
     }
 
+bool validation(vector < vector < int > >& Matrix) {  // Try to remove SOME stupid impossible matrix. Some impossible matrix will stay.
+    vector<int> forced;//(0,0);
+    for(int members = 0; members < Matrix.size(); members++) {
+        if(Matrix[members].size() == 1) {
+            forced.push_back(Matrix[members][0]);
+            }
+        }
+    for(int a = 0; a < forced.size(); a++) {
+        for(int b = a; b < forced.size(); b++) {
+            if(forced[a] == -forced[b]) {
+                return false;
+                }
+            }
+        }
+    return true;
+    }
+
 int main() {
     srand(time(NULL));       // No need for better init.
     // int hardToSolve = 0; // ?
     int   members =  membersCalc();
     int choices = 1;
     vector < vector < int > > Matrix(members, vector< int >(choices, 0));
-    generateMatrix(Matrix);
+    do {
+        generateMatrix(Matrix);
+        }
+    while(validation(Matrix) == false);
     displayMatrix(Matrix);
     cout << "Your proposition? (1 positive number at a time, a true letter to close.)" << endl;
     vector<int> MatrixProposed(0, 0);
