@@ -10,19 +10,25 @@ using namespace std;
 
 int maxCandidate() { return 14;} // Max 14 for windows 10, to avoid bad presentation.
 int minCandidate() { return 2;}
-
 int membersCalc() {
-    return rand() % 50 + 10;
+    return rand() % 50 + 1;
+    }
+string configurationLanguage() {
+    return "en";
+    }
+
+void intro(int maxCandidate, string lgg = "en") {
+    cout << "The members of a private club wants to recrute some friends.\nSome candidats are here, with a number, from 1 to " << maxCandidate << "."  << endl;
+    cout << "Each member can have a friend (shown with his or her number) or a foe (shown with his or her -number), in the list, each line by member." << endl;
+    cout << "If it possible, make a good list: each member must have at least one choice garanted: a friend in or a foe out." << endl;
+    cout << "I don't know if it's possible to win, because I'm stupid, but I avoid some stupid problems." << endl;
+    }
+void prop(string lgg = "en") {
+    cout << "Your proposition? (1 positive number at a time, negative numbers are ignored to help you, a true letter to close.)" << endl;
     }
 
 int choicesCalc() {
     return rand() % (maxCandidate() - minCandidate() + 1) + minCandidate();
-    }
-
-void absVector1D(vector < int >& Matrix1D) {
-    for(int a = 0; a < Matrix1D.size(); a++)  {
-        Matrix1D[a] = abs(Matrix1D[a]);
-        }
     }
 
 void displayMatrix(vector < vector < int > >& Matrix) { // Ok.
@@ -137,8 +143,10 @@ bool validation(vector < vector < int > >& Matrix) {  // Try to remove SOME stup
 
 int main() {
     srand(time(NULL));       // No need for better init.
+    string lgg = configurationLanguage();
+    intro(maxCandidate(), lgg);
     // int hardToSolve = 0; // ?
-    int   members =  membersCalc();
+    int members =  membersCalc();
     int choices = 1;
     vector < vector < int > > Matrix(members, vector< int >(choices, 0));
     do {
@@ -146,18 +154,19 @@ int main() {
         }
     while(validation(Matrix) == false);
     displayMatrix(Matrix);
-    cout << "Your proposition? (1 positive number at a time, a true letter to close.)" << endl;
+    prop(lgg);
     vector<int> MatrixProposed(0, 0);
     int input = 0;
     while(cin >> input) { // Enter any letter to end the loop!
-        MatrixProposed.push_back(input);
+        if(input > 0) { // You can add negative number for hint.
+            MatrixProposed.push_back(input);
+            }
         }
-    absVector1D(MatrixProposed); // Only positive numbers! Cheaters defeated!
     if(testMatrix(MatrixProposed, Matrix)) {
-        cout << "You win!" << endl;
+        cout << ":-)" << endl;
         }
     else {
-        cout << "You lose! (I don't know if it's possible to win, I'm stupid.)" << endl;
+        cout << ":-(" << endl;
         }
     return 0;
     }
